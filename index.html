@@ -19,6 +19,7 @@
       color: #1a2e1a;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 24px;
@@ -379,6 +380,7 @@
     .privacy i { color: #4a9a4a; font-size: 13px; margin-top: 2px; flex-shrink: 0; }
     .privacy strong { color: #3a6e3a; font-weight: 600; }
 
+
     @media (max-width: 480px) {
       body {
         padding: 16px;
@@ -527,7 +529,7 @@
     </div>
   </div>
 
-  <script>
+<script>
     const PROVIDERS = {
       openai:      { method: 'GET',  getEndpoint: ()    => 'https://api.openai.com/v1/models',                                                    getHeaders: k => ({ 'Authorization': `Bearer ${k}` }),                                                                                                                               body: null },
       gemini:      { method: 'GET',  getEndpoint: k     => `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(k)}`, getHeaders: ()=> ({}),                                                                                                                                                             body: null },
