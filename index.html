@@ -28,7 +28,7 @@
       background: #ffffff;
       border-radius: 20px;
       width: 100%;
-      max-width: 480px;
+      max-width: 580px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 20px 60px rgba(34,100,34,0.08);
       overflow: hidden;
     }
@@ -386,6 +386,55 @@
 
     .privacy i { color: #4a9a4a; font-size: 13px; margin-top: 2px; flex-shrink: 0; }
     .privacy strong { color: #3a6e3a; font-weight: 600; }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px;
+        align-items: flex-start;
+        padding-top: 24px;
+      }
+
+      .card { border-radius: 16px; }
+
+      .card-top { padding: 22px 20px 20px; }
+
+      h1 { font-size: 18px; }
+
+      .header-sub { font-size: 11.5px; }
+
+      .card-body { padding: 20px 16px 20px; }
+
+      .custom-row { grid-template-columns: 1fr; }
+
+      .custom-section { padding: 14px; }
+
+      .btn-row { gap: 8px; }
+
+      .reset-btn { padding: 11px 14px; font-size: 12.5px; }
+
+      .test-btn { font-size: 13.5px; }
+
+      .result-inner { padding: 12px 14px; gap: 10px; }
+
+      .result-icon-wrap { width: 30px; height: 30px; font-size: 13px; }
+
+      .result-title { font-size: 13px; }
+
+      .result-desc { font-size: 11.5px; }
+
+      select,
+      input[type="text"],
+      input[type="password"],
+      textarea { font-size: 13px; padding: 10px 12px; }
+
+      .key-wrap input { padding-right: 40px; }
+    }
+
+    @media (max-width: 360px) {
+      .card-top { padding: 18px 16px 16px; }
+      .card-body { padding: 16px 14px 18px; }
+      h1 { font-size: 16px; }
+    }
   </style>
 </head>
 <body>
@@ -394,7 +443,7 @@
       <div class="header">
         <span class="header-badge">Developer Tool</span>
         <h1>API Key Tester</h1>
-        <span class="header-sub">Validate any AI platform key instantly</span>
+        <span class="header-sub">Check and validate any AI platform API key instantly</span>
       </div>
     </div>
 
@@ -481,7 +530,7 @@
         <div class="result-bar"></div>
       </div>
 
-      <p class="privacy"><i class="fa-solid fa-circle-info"></i> Your key is sent only to the provider — never stored or shared.</p>
+      <p class="privacy"><i class="fa-solid fa-circle-info"></i> Your key is secure — never stored or shared.</p>
     </div>
   </div>
 
