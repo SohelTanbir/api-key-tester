@@ -1,5 +1,7 @@
 # API Key Tester
 
+**Live:** [https://api-key-tester-seven.vercel.app](https://api-key-tester-seven.vercel.app)
+
 A simple, single-file web app to validate AI platform API keys instantly. No build step, no dependencies, no backend — just open `index.html` in your browser.
 
 ## Supported Providers
