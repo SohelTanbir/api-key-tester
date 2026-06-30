@@ -30,6 +30,10 @@ A simple, single-file web app to validate AI platform API keys instantly. No bui
 
 ## Usage
 
+**Option 1 — Live site (no install):**
+Visit [https://api-key-tester-seven.vercel.app](https://api-key-tester-seven.vercel.app), select your provider, paste the API key, click **Test Key**.
+
+**Option 2 — Local:**
 1. Download or clone this repo
 2. Open `index.html` in any browser
 3. Select your provider, paste the API key, click **Test Key**
