@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Key Tester</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f1f5f1;
+      background-image: radial-gradient(circle at 20% 50%, #d4eeda 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, #e8f5e9 0%, transparent 40%);
+      color: #1a2e1a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 20px 60px rgba(34,100,34,0.08);
+      overflow: hidden;
+    }
+
+    .card-top {
+      background: linear-gradient(135deg, #1a7a1a 0%, #2ea82e 100%);
+      padding: 28px 32px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-top::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 140px; height: 140px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+
+    .card-top::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; right: 60px;
+      width: 80px; height: 80px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-badge {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.4px;
+      line-height: 1.2;
+    }
+
+    .header-sub {
+      font-size: 12.5px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.65);
+      margin-top: 1px;
+    }
+
+    .card-body { padding: 28px 32px 26px; }
+
+    .field { margin-bottom: 18px; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #4a6e4a;
+      margin-bottom: 7px;
+      letter-spacing: 0.1px;
+    }
+
+    select,
+    input[type="text"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      background: #f8fbf8;
+      border: 1.5px solid #ddeedd;
+      border-radius: 10px;
+      color: #1a2e1a;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    select:hover, input:hover, textarea:hover { border-color: #bbddbb; }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a6e4a' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 13px center;
+      background-size: 12px 7px;
+      padding-right: 38px;
+      cursor: pointer;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      border-color: #2ea82e;
+      box-shadow: 0 0 0 3px rgba(46,168,46,0.12);
+      background: #fff;
+    }
+
+    /* Eye inside input */
+    .key-wrap {
+      position: relative;
+    }
+
+    .key-wrap input {
+      padding-right: 42px;
+    }
+
+    .eye-btn {
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #8aaa8a;
+      font-size: 14px;
+      padding: 0;
+      line-height: 1;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+    }
+
+    .eye-btn:hover { color: #2ea82e; }
+
+    .custom-section {
+      border: 1.5px dashed #c8e4c8;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      display: none;
+      background: #f6fbf6;
+    }
+
+    .custom-section.visible { display: block; }
+    .custom-section .field:last-child { margin-bottom: 0; }
+
+    .custom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    textarea {
+      resize: vertical;
+      min-height: 68px;
+      font-size: 12.5px;
+      line-height: 1.6;
+    }
+
+    .section-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #6a8e6a;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #ddeedd;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .reset-btn {
+      background: #f4f8f4;
+      color: #5a7a5a;
+      border: 1.5px solid #ddeedd;
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .reset-btn:hover {
+      background: #eaf2ea;
+      border-color: #aaccaa;
+      color: #2a5a2a;
+    }
+
+    .test-btn {
+      flex: 1;
+      background: linear-gradient(135deg, #1a8a1a 0%, #2ec42e 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(30,138,30,0.3);
+      letter-spacing: 0.2px;
+    }
+
+    .test-btn:hover:not(:disabled) {
+      opacity: 0.9;
+      box-shadow: 0 6px 18px rgba(30,138,30,0.38);
+    }
+
+    .test-btn:active:not(:disabled) { transform: scale(0.985); }
+    .test-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+    /* Result card */
+    .result {
+      display: none;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      animation: slideUp 0.22s ease;
+    }
+
+    .result.visible { display: block; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 15px 18px;
+    }
+
+    .result-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .result-content { flex: 1; min-width: 0; }
+
+    .result-title {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+
+    .result-desc {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      opacity: 0.8;
+    }
+
+    .result-bar {
+      height: 3px;
+    }
+
+    /* State colours */
+    .result.success .result-inner   { background: #f0fdf4; border: 1.5px solid #bbf7d0; border-bottom: none; border-radius: 12px 12px 0 0; }
+    .result.success .result-bar     { background: #22c55e; }
+    .result.success .result-icon-wrap { background: #dcfce7; color: #16a34a; }
+    .result.success .result-title   { color: #14532d; }
+    .result.success .result-desc    { color: #166534; }
+
+    .result.error .result-inner     { background: #fef2f2; border: 1.5px solid #fecaca; border-bottom: none; border-radius: 12px 12px 0 0; }
+    .result.error .result-bar       { background: #ef4444; }
+    .result.error .result-icon-wrap { background: #fee2e2; color: #dc2626; }
+    .result.error .result-title     { color: #7f1d1d; }
+    .result.error .result-desc      { color: #991b1b; }
+
+    .result.warning .result-inner   { background: #fefce8; border: 1.5px solid #fde68a; border-bottom: none; border-radius: 12px 12px 0 0; }
+    .result.warning .result-bar     { background: #f59e0b; }
+    .result.warning .result-icon-wrap { background: #fef9c3; color: #d97706; }
+    .result.warning .result-title   { color: #78350f; }
+    .result.warning .result-desc    { color: #92400e; }
+
+    .result.loading .result-inner   { background: #f0fdf4; border: 1.5px solid #bbf7d0; border-bottom: none; border-radius: 12px 12px 0 0; }
+    .result.loading .result-bar     { background: linear-gradient(90deg, #22c55e 0%, #86efac 50%, #22c55e 100%); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; }
+    .result.loading .result-icon-wrap { background: #dcfce7; color: #16a34a; }
+    .result.loading .result-title   { color: #14532d; }
+    .result.loading .result-desc    { color: #166534; }
+
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(22,163,74,0.25);
+      border-top-color: #16a34a;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .anthropic-note {
+      font-size: 12px;
+      color: #7a6e3a;
+      background: #fefce8;
+      border: 1.5px solid #fde68a;
+      border-radius: 8px;
+      padding: 9px 13px;
+      margin-bottom: 16px;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .note {
+      font-size: 11px;
+      color: #7a9a7a;
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    .privacy {
+      font-size: 11.5px;
+      font-weight: 400;
+      color: #8aaa8a;
+      text-align: left;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f6fbf6;
+      border: 1.5px solid #ddeedd;
+      border-radius: 8px;
+      padding: 10px 13px;
+      margin-top: 20px;
+    }
+
+    .privacy i { color: #4a9a4a; font-size: 13px; margin-top: 2px; flex-shrink: 0; }
+    .privacy strong { color: #3a6e3a; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-top">
+      <div class="header">
+        <span class="header-badge">Developer Tool</span>
+        <h1>API Key Tester</h1>
+        <span class="header-sub">Validate any AI platform key instantly</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="field">
+        <label>Provider</label>
+        <select id="provider">
+          <option value="openai">OpenAI / ChatGPT</option>
+          <option value="gemini">Google Gemini</option>
+          <option value="groq">Groq</option>
+          <option value="anthropic">Anthropic (Claude)</option>
+          <option value="mistral">Mistral AI</option>
+          <option value="cohere">Cohere</option>
+          <option value="together">Together AI</option>
+          <option value="deepseek">DeepSeek</option>
+          <option value="openrouter">OpenRouter</option>
+          <option value="custom">Custom Provider</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>API Key</label>
+        <div class="key-wrap">
+          <input type="password" id="apiKey" placeholder="Paste your API key here" autocomplete="off" spellcheck="false" />
+          <button class="eye-btn" id="toggleShow" title="Show / hide key" tabindex="-1">
+            <i class="fa-regular fa-eye" id="eyeIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="custom-section" id="customSection">
+        <div class="section-label">Custom Config</div>
+
+        <div class="field">
+          <label>Endpoint URL</label>
+          <input type="text" id="customEndpoint" placeholder="https://api.example.com/v1/models" />
+        </div>
+
+        <div class="custom-row">
+          <div class="field">
+            <label>Auth Header Name</label>
+            <input type="text" id="customHeaderName" value="Authorization" />
+          </div>
+          <div class="field">
+            <label>Method</label>
+            <select id="customMethod">
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Auth Header Value</label>
+          <input type="text" id="customHeaderValue" value="Bearer {KEY}" />
+          <p class="note">{KEY} is replaced with your actual key</p>
+        </div>
+
+        <div class="field">
+          <label>Request Body (JSON, optional)</label>
+          <textarea id="customBody" placeholder='{"key": "value"}'></textarea>
+        </div>
+      </div>
+
+      <div class="anthropic-note" id="anthropicNote">
+        Anthropic has no free listing endpoint — this test sends one minimal message (~$0.00001).
+      </div>
+
+      <div class="btn-row">
+        <button class="reset-btn" id="resetBtn">Reset</button>
+        <button class="test-btn" id="testBtn">Test Key</button>
+      </div>
+
+      <div class="result" id="result">
+        <div class="result-inner">
+          <div class="result-icon-wrap" id="resultIconWrap">
+            <i id="resultIcon"></i>
+          </div>
+          <div class="result-content">
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-desc" id="resultDesc"></div>
+          </div>
+        </div>
+        <div class="result-bar"></div>
+      </div>
+
+      <p class="privacy"><i class="fa-solid fa-circle-info"></i> Your key is sent only to the provider — never stored or shared.</p>
+    </div>
+  </div>
+
+  <script>
+    const PROVIDERS = {
+      openai:      { method: 'GET',  getEndpoint: ()    => 'https://api.openai.com/v1/models',                                                    getHeaders: k => ({ 'Authorization': `Bearer ${k}` }),                                                                                                                               body: null },
+      gemini:      { method: 'GET',  getEndpoint: k     => `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(k)}`, getHeaders: ()=> ({}),                                                                                                                                                             body: null },
+      groq:        { method: 'GET',  getEndpoint: ()    => 'https://api.groq.com/openai/v1/models',                                               getHeaders: k => ({ 'Authorization': `Bearer ${k}` }),                                                                                                                               body: null },
+      anthropic:   { method: 'POST', getEndpoint: ()    => 'https://api.anthropic.com/v1/messages',                                               getHeaders: k => ({ 'x-api-key': k, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true', 'content-type': 'application/json' }),               body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1, messages: [{ role: 'user', content: 'hi' }] }) },
+      mistral:     { method: 'GET',  getEndpoint: ()    => 'https://api.mistral.ai/v1/models',                                                    getHeaders: k => ({ 'Authorization': `Bearer ${k}` }),                                                                                                                               body: null },
+      cohere:      { method: 'GET',  getEndpoint: ()    => 'https://api.cohere.com/v2/models',                                                    getHeaders: k => ({ 'Authorization': `Bearer ${k}` }),                                                                                                                               body: null },
+      together:    { method: 'GET',  getEndpoint: ()    => 'https://api.together.xyz/v1/models',                                                  getHeaders: k => ({ 'Authorization': `Bearer ${k}` }),                                                                                                                               body: null },
+      deepseek:    { method: 'GET',  getEndpoint: ()    => 'https://api.deepseek.com/v1/models',                                                  getHeaders: k => ({ 'Authorization': `Bearer ${k}` }),                                                                                                                               body: null },
+      openrouter:  { method: 'GET',  getEndpoint: ()    => 'https://openrouter.ai/api/v1/auth/key',                                               getHeaders: k => ({ 'Authorization': `Bearer ${k}` }),                                                                                                                               body: null },
+    };
+
+    const providerEl    = document.getElementById('provider');
+    const apiKeyEl      = document.getElementById('apiKey');
+    const toggleBtn     = document.getElementById('toggleShow');
+    const eyeIcon       = document.getElementById('eyeIcon');
+    const testBtn       = document.getElementById('testBtn');
+    const customSection = document.getElementById('customSection');
+    const anthropicNote = document.getElementById('anthropicNote');
+    const resultEl      = document.getElementById('result');
+    const resultIconWrap = document.getElementById('resultIconWrap');
+    const resultIconEl  = document.getElementById('resultIcon');
+    const resultTitle   = document.getElementById('resultTitle');
+    const resultDesc    = document.getElementById('resultDesc');
+
+    providerEl.addEventListener('change', () => {
+      const v = providerEl.value;
+      customSection.classList.toggle('visible', v === 'custom');
+      anthropicNote.style.display = v === 'anthropic' ? 'block' : 'none';
+    });
+
+    toggleBtn.addEventListener('click', () => {
+      const isPassword = apiKeyEl.type === 'password';
+      apiKeyEl.type = isPassword ? 'text' : 'password';
+      eyeIcon.className = isPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+    });
+
+    testBtn.addEventListener('click', testKey);
+    apiKeyEl.addEventListener('keydown', e => { if (e.key === 'Enter') testKey(); });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      providerEl.value = 'openai';
+      apiKeyEl.value = '';
+      apiKeyEl.type = 'password';
+      eyeIcon.className = 'fa-regular fa-eye';
+      customSection.classList.remove('visible');
+      anthropicNote.style.display = 'none';
+      resultEl.className = 'result';
+      document.getElementById('customEndpoint').value = '';
+      document.getElementById('customHeaderName').value = 'Authorization';
+      document.getElementById('customHeaderValue').value = 'Bearer {KEY}';
+      document.getElementById('customMethod').value = 'GET';
+      document.getElementById('customBody').value = '';
+      apiKeyEl.focus();
+    });
+
+    function showResult(type, title, desc, iconClass) {
+      resultEl.className = `result ${type} visible`;
+      if (type === 'loading') {
+        resultIconWrap.innerHTML = '<span class="spinner"></span>';
+      } else {
+        resultIconWrap.innerHTML = `<i class="${iconClass}"></i>`;
+      }
+      resultTitle.textContent = title;
+      resultDesc.textContent  = desc;
+    }
+
+    async function testKey() {
+      const providerId   = providerEl.value;
+      const key          = apiKeyEl.value.trim();
+      const providerName = providerEl.options[providerEl.selectedIndex].text;
+
+      if (!key) {
+        showResult('error', 'No API key entered', 'Paste your key in the field above and try again.', 'fa-solid fa-xmark');
+        return;
+      }
+
+      testBtn.disabled = true;
+      testBtn.textContent = 'Testing…';
+      showResult('loading', 'Checking your key…', `Sending a test request to ${providerName}.`, '');
+
+      try {
+        let endpoint, method, headers, body;
+
+        if (providerId === 'custom') {
+          endpoint = document.getElementById('customEndpoint').value.trim();
+          const headerName  = document.getElementById('customHeaderName').value.trim() || 'Authorization';
+          const headerValue = document.getElementById('customHeaderValue').value.replace(/\{KEY\}/g, key);
+          method = document.getElementById('customMethod').value;
+          const bodyRaw = document.getElementById('customBody').value.trim();
+          headers = { [headerName]: headerValue };
+          if (method === 'POST' && bodyRaw) {
+            headers['content-type'] = 'application/json';
+            body = bodyRaw;
+          }
+          if (!endpoint) {
+            showResult('error', 'Endpoint URL missing', 'Enter the API endpoint URL in the custom config section.', 'fa-solid fa-xmark');
+            return;
+          }
+        } else {
+          const cfg = PROVIDERS[providerId];
+          method   = cfg.method;
+          endpoint = cfg.getEndpoint(key);
+          headers  = cfg.getHeaders(key);
+          body     = cfg.body;
+        }
+
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 10000);
+
+        let response;
+        try {
+          response = await fetch(endpoint, { method, headers, body: body || undefined, signal: controller.signal });
+        } finally {
+          clearTimeout(timer);
+        }
+
+        if (response.ok) {
+          showResult('success', 'Key is valid', `Your ${providerName} API key is active and working correctly.`, 'fa-solid fa-check');
+        } else if (response.status === 401) {
+          showResult('error', 'Invalid API key', `${providerName} rejected this key. Check for typos or generate a new key.`, 'fa-solid fa-xmark');
+        } else if (response.status === 403) {
+          showResult('error', 'Access denied', `The key exists but does not have permission for this request (403 Forbidden).`, 'fa-solid fa-ban');
+        } else if (response.status === 429) {
+          showResult('warning', 'Rate limit reached', `Your key is valid but you have hit the rate limit. Try again in a moment.`, 'fa-solid fa-clock');
+        } else if (response.status === 402) {
+          showResult('warning', 'Quota exhausted', `Your key is valid but the account has run out of credits. Top up to continue.`, 'fa-solid fa-circle-exclamation');
+        } else {
+          showResult('error', `Unexpected response (${response.status})`, `${providerName} returned: ${response.statusText || 'no message'}.`, 'fa-solid fa-triangle-exclamation');
+        }
+
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          showResult('error', 'Request timed out', 'The request took more than 10 seconds. Check your connection and try again.', 'fa-solid fa-hourglass-end');
+        } else {
+          showResult('warning', 'Network error', 'Could not reach the provider — possibly a CORS restriction or you are offline.', 'fa-solid fa-wifi');
+        }
+      } finally {
+        testBtn.disabled = false;
+        testBtn.textContent = 'Test Key';
+      }
+    }
+  </script>
+</body>
+</html>
