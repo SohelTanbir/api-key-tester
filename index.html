@@ -171,11 +171,11 @@
     .custom-section.visible { display: block; }
     .custom-section .field:last-child { margin-bottom: 0; }
 
-    .custom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .custom-row { display: grid; grid-template-columns: 1fr 86px; gap: 12px; }
 
     textarea {
       resize: vertical;
-      min-height: 68px;
+      min-height: 52px;
       font-size: 12.5px;
       line-height: 1.6;
     }
@@ -399,7 +399,7 @@
 
       .card-body { padding: 20px 16px 20px; }
 
-      .custom-row { grid-template-columns: 1fr; }
+      .custom-row { grid-template-columns: 1fr !important; }
 
       .custom-section { padding: 14px; }
 
@@ -472,15 +472,10 @@
       <div class="custom-section" id="customSection">
         <div class="section-label">Custom Config</div>
 
-        <div class="field">
-          <label>Endpoint URL</label>
-          <input type="text" id="customEndpoint" placeholder="https://api.example.com/v1/models" />
-        </div>
-
         <div class="custom-row">
           <div class="field">
-            <label>Auth Header Name</label>
-            <input type="text" id="customHeaderName" value="Authorization" />
+            <label>Endpoint URL</label>
+            <input type="text" id="customEndpoint" placeholder="https://api.example.com/v1/models" />
           </div>
           <div class="field">
             <label>Method</label>
@@ -491,15 +486,15 @@
           </div>
         </div>
 
-        <div class="field">
-          <label>Auth Header Value</label>
-          <input type="text" id="customHeaderValue" value="Bearer {KEY}" />
-          <p class="note">{KEY} is replaced with your actual key</p>
-        </div>
-
-        <div class="field">
-          <label>Request Body (JSON, optional)</label>
-          <textarea id="customBody" placeholder='{"key": "value"}'></textarea>
+        <div class="custom-row" style="grid-template-columns:1fr 1fr;">
+          <div class="field">
+            <label>Auth Header Value</label>
+            <input type="text" id="customHeaderValue" value="Bearer {KEY}" />
+          </div>
+          <div class="field">
+            <label>Body (JSON, optional)</label>
+            <textarea id="customBody" placeholder='{"key": "value"}'></textarea>
+          </div>
         </div>
       </div>
 
@@ -579,7 +574,6 @@
       anthropicNote.style.display = 'none';
       resultEl.className = 'result';
       document.getElementById('customEndpoint').value = '';
-      document.getElementById('customHeaderName').value = 'Authorization';
       document.getElementById('customHeaderValue').value = 'Bearer {KEY}';
       document.getElementById('customMethod').value = 'GET';
       document.getElementById('customBody').value = '';
@@ -616,7 +610,7 @@
 
         if (providerId === 'custom') {
           endpoint = document.getElementById('customEndpoint').value.trim();
-          const headerName  = document.getElementById('customHeaderName').value.trim() || 'Authorization';
+          const headerName  = 'Authorization';
           const headerValue = document.getElementById('customHeaderValue').value.replace(/\{KEY\}/g, key);
           method = document.getElementById('customMethod').value;
           const bodyRaw = document.getElementById('customBody').value.trim();
